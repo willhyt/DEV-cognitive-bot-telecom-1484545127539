@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: DEV-cognitive-bot-telecom
+  host: dev-cognitive-bot-telecom
+  disk_quota: 1024M
+  services:
+  - DEV-cognitive-bot-telecom-cloudantNoSQLDB
