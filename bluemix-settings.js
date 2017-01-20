@@ -51,7 +51,7 @@ var settings = module.exports = {
 
     functionGlobalContext: { 
         process:process,
-        GoogleMapsAPI:require('GoogleMapsAPI')
+        GoogleMapsAPI:require('googlemaps')
     },
 
     storageModule: require("./couchstorage")
