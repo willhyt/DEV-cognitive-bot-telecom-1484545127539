@@ -50,7 +50,8 @@ var settings = module.exports = {
     httpStatic: path.join(__dirname,"public"),
 
     functionGlobalContext: { 
-        process:process
+        process:process,
+        GoogleMapsAPI:require('GoogleMapsAPI')
     },
 
     storageModule: require("./couchstorage")
