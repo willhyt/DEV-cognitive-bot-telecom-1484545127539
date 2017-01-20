@@ -1,0 +1,74 @@
+[
+    {
+        "id": "36ac56a.8d00eaa",
+        "type": "tab",
+        "label": "Delete Resoruce Files Flow"
+    },
+    {
+        "id": "cf0d3e8c.888fe",
+        "type": "inject",
+        "z": "36ac56a.8d00eaa",
+        "name": "Delete resources",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 199.33331298828125,
+        "y": 122.69444274902344,
+        "wires": [
+            [
+                "c8a1abfd.b9a3b8"
+            ]
+        ]
+    },
+    {
+        "id": "c8a1abfd.b9a3b8",
+        "type": "function",
+        "z": "36ac56a.8d00eaa",
+        "name": "DeleteResourcesFiles",
+        "func": "var bpmtools = global.get('bpmtools');\nvar deleted = 0;\ntry{\n    deleted = bpmtools.deleteAllResourcesFile();\n}catch(err){\n    node.error('DeleteResourcesFiles throws error:'+err);\n}\n\nmsg.payload = 'deleteAllResourcesFile completed, delete count: '+deleted;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 415.58335876464844,
+        "y": 122.19446182250977,
+        "wires": [
+            [
+                "e11643a8.69d91"
+            ]
+        ]
+    },
+    {
+        "id": "7bf34503.ac438c",
+        "type": "comment",
+        "z": "36ac56a.8d00eaa",
+        "name": "Why delete resources files",
+        "info": "resources files maybe crashed because of exceptional process happened.\nThis delete function will remove all resources file to reset BPM process manager.\nWarning: deletion of resources files will lost all of processes data executed before.",
+        "x": 148.1666259765625,
+        "y": 204.94448852539062,
+        "wires": []
+    },
+    {
+        "id": "e11643a8.69d91",
+        "type": "debug",
+        "z": "36ac56a.8d00eaa",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 624.8332977294922,
+        "y": 122.4444465637207,
+        "wires": []
+    },
+    {
+        "id": "4ab7c4b3.3c7cec",
+        "type": "comment",
+        "z": "36ac56a.8d00eaa",
+        "name": "IBM Copyright V1.0",
+        "info": "Author: wjwu@tw.ibm.com\nPublish: 2016-07-30\n",
+        "x": 122.90554809570312,
+        "y": 58,
+        "wires": []
+    }
+]

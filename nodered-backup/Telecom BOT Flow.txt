@@ -1,0 +1,1297 @@
+[
+    {
+        "id": "8a10d260.97ada",
+        "type": "tab",
+        "label": "Telecom BOT Flow"
+    },
+    {
+        "id": "cca2ad79.29f918",
+        "type": "tab",
+        "label": "Delete Resoruce Files Flow"
+    },
+    {
+        "id": "7d45e512.e8c27c",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "3103d2a4.d55e76",
+        "type": "subflow",
+        "name": "NLU-Telecom",
+        "info": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "cda15e04.136cc8"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 2160,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "8caf75c1.46ae6",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 2160,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "8caf75c1.46ae6",
+                        "port": 1
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "f59d3da8.f3b67",
+        "type": "inject",
+        "z": "cca2ad79.29f918",
+        "name": "Delete resources",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 226.42777633666992,
+        "y": 217.3333282470703,
+        "wires": [
+            [
+                "2fdb3331.b4197c"
+            ]
+        ]
+    },
+    {
+        "id": "2fdb3331.b4197c",
+        "type": "function",
+        "z": "cca2ad79.29f918",
+        "name": "DeleteResourcesFiles",
+        "func": "var bpmtools = global.get('bpmtools');\nvar deleted = 0;\ntry{\n    deleted = bpmtools.deleteAllResourcesFile();\n}catch(err){\n    node.error('DeleteResourcesFiles throws error:'+err);\n}\n\nmsg.payload = 'deleteAllResourcesFile completed, delete count: '+deleted;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 460,
+        "y": 220,
+        "wires": [
+            [
+                "ed6c8b44.11e288"
+            ]
+        ]
+    },
+    {
+        "id": "8659ae44.3fcca",
+        "type": "comment",
+        "z": "cca2ad79.29f918",
+        "name": "Why delete resources files",
+        "info": "resources files maybe crashed because of exceptional process happened.\nThis delete function will remove all resources file to reset BPM process manager.\nWarning: deletion of resources files will lost all of processes data executed before.",
+        "x": 150,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ed6c8b44.11e288",
+        "type": "debug",
+        "z": "cca2ad79.29f918",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 670,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "827f31a2.7015d",
+        "type": "comment",
+        "z": "cca2ad79.29f918",
+        "name": "IBM Copyright V1.0",
+        "info": "Author: wjwu@tw.ibm.com\nPublish: 2016-07-30\n",
+        "x": 110,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f7484148.5af7d8",
+        "type": "catch",
+        "z": "8a10d260.97ada",
+        "name": "Botme Error",
+        "scope": null,
+        "x": 130,
+        "y": 580,
+        "wires": [
+            [
+                "c586077d.47c82"
+            ]
+        ]
+    },
+    {
+        "id": "c586077d.47c82",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 330,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "a337cd72.bd0c68",
+        "type": "template",
+        "z": "8a10d260.97ada",
+        "name": "Slack Msg",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{#bpm_data}}\n    To  @{{#input}}{{{bpm_user}}}{{/input}}\n    {{#output}}\n        {{{text}}}\n    {{/output}}\n{{/bpm_data}}",
+        "x": 2347,
+        "y": 412,
+        "wires": [
+            [
+                "d21f2e68.8d83a"
+            ]
+        ]
+    },
+    {
+        "id": "1b932cb9.18bb83",
+        "type": "inject",
+        "z": "8a10d260.97ada",
+        "name": "NLP Test Input",
+        "topic": "",
+        "payload": "我想要找10坪的分離式日立變頻冷氣機",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 857,
+        "y": 492,
+        "wires": [
+            [
+                "99a8b9ae.5a2a"
+            ]
+        ]
+    },
+    {
+        "id": "c109b895.67f5b",
+        "type": "comment",
+        "z": "8a10d260.97ada",
+        "name": "IBM Copyright V1.0",
+        "info": "Author: wjwu@tw.ibm.com\nPublish: 2016-07-30\n",
+        "x": 130.99996948242188,
+        "y": 29,
+        "wires": []
+    },
+    {
+        "id": "4257f553.e8b5a4",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "Slack Obj",
+        "func": "if(!msg.slackObj){  // not a Slack channel\n    return;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2157,
+        "y": 412,
+        "wires": [
+            [
+                "a337cd72.bd0c68"
+            ]
+        ]
+    },
+    {
+        "id": "ca0eec81.a9ee38",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "func": "if(msg.slackObj){                   // input thru Slack channel                   \n    msg.bpm_user = msg.slackObj.fromUser;\n    msg.payload = msg.slackObj.text;\n    if(msg.bpm_user==''){\n        return;\n    }\n    //a = Math.random();\n    //msg.bpm_user = Math.round(a);\n    //msg.bpm_user = 21;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 867,
+        "y": 412,
+        "wires": [
+            [
+                "99a8b9ae.5a2a"
+            ]
+        ]
+    },
+    {
+        "id": "dd9a5916.17134",
+        "type": "Slack Bot In",
+        "z": "8a10d260.97ada",
+        "name": "Slack Input",
+        "apiToken": "xoxb-88617782290-kuDe1kuOGbs8E53oW7cmmScz",
+        "channel": "dev-bot-telecom",
+        "x": 158.99996948242188,
+        "y": 401,
+        "wires": [
+            [
+                "8a8b6ae6.636868",
+                "5237c3f8.47370c"
+            ]
+        ]
+    },
+    {
+        "id": "d21f2e68.8d83a",
+        "type": "Slack Bot Out",
+        "z": "8a10d260.97ada",
+        "name": "Slack Output",
+        "apiToken": "xoxb-88617782290-kuDe1kuOGbs8E53oW7cmmScz",
+        "channel": "dev-bot-telecom",
+        "x": 2547,
+        "y": 412,
+        "wires": []
+    },
+    {
+        "id": "7f4d1f24.2454f8",
+        "type": "http in",
+        "z": "8a10d260.97ada",
+        "name": "LINE Input",
+        "url": "/line",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 161.7499542236328,
+        "y": 331,
+        "wires": [
+            [
+                "65508181.57b248"
+            ]
+        ]
+    },
+    {
+        "id": "77a4a9cb.6f91f8",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 2427,
+        "y": 252,
+        "wires": []
+    },
+    {
+        "id": "65508181.57b248",
+        "type": "json",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "x": 313.74993896484375,
+        "y": 332,
+        "wires": [
+            [
+                "e673208e.017c68",
+                "739a0c1a.e98c24"
+            ]
+        ]
+    },
+    {
+        "id": "b5110a1.3f90578",
+        "type": "http response",
+        "z": "8a10d260.97ada",
+        "name": "LINE Output",
+        "x": 2427,
+        "y": 332,
+        "wires": []
+    },
+    {
+        "id": "e673208e.017c68",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "parse LINE input",
+        "func": "if(msg.payload.isRich==true)\n    return msg;\nelse{\n    var str=msg.payload.split(\"\\\"\");\n    var def=str[3];\n    msg.payload=def;\n    msg.bpm_user = str[7];\n    msg.isLine = true; \n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 494.74993896484375,
+        "y": 331,
+        "wires": [
+            [
+                "8a8b6ae6.636868"
+            ]
+        ]
+    },
+    {
+        "id": "900f713.223301",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "prepare LINE output",
+        "func": "if(msg.isLine){\n    var a=msg.bpm_data.output;\n    var t = '';\n    for(var i = 0; i < a.length; i++){\n        t += a[i].text;\n        if (a.length > 1)\n            t += '\\n';\n    }\n    msg.payload = t;\n    return msg;\n}\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2197,
+        "y": 332,
+        "wires": [
+            [
+                "b5110a1.3f90578",
+                "77a4a9cb.6f91f8"
+            ]
+        ]
+    },
+    {
+        "id": "ed1a473f.254188",
+        "type": "inject",
+        "z": "8a10d260.97ada",
+        "name": "VR Test Input",
+        "topic": "",
+        "payload": "http://a.ecimg.tw/pic/v1/data/item/201404/D/P/A/F/0/3/DPAF03-A90051HAV000_5342c561e7b02.jpg",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 687,
+        "y": 272,
+        "wires": [
+            [
+                "9091382d.d79bd8"
+            ]
+        ]
+    },
+    {
+        "id": "9091382d.d79bd8",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "set classifier_id",
+        "func": "msg.params = {};\nmsg.params[\"classifier_ids\"]=['airline_317477743']\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 897,
+        "y": 272,
+        "wires": [
+            [
+                "d31653ce.33a038"
+            ]
+        ]
+    },
+    {
+        "id": "48f64f0.cef07b",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "VR_U",
+        "func": "var top = msg.result.images[0].classifiers[0].classes[0].class;\nvar target='';\nif(top === 'airsep')\n    target = '三洋分離式';\nelse if(top === 'airwin')\n    target = '日立窗型';\nelse\n    target = 'unknow';\n\nmsg.payload ='請問有賣'+ target+'冷氣嗎';\nif(msg.slackObj)\n    msg.bpm_user = msg.slackObj.fromUser;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1227,
+        "y": 272,
+        "wires": [
+            [
+                "99a8b9ae.5a2a"
+            ]
+        ]
+    },
+    {
+        "id": "8a8b6ae6.636868",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "prepare input",
+        "func": "\nif(msg.slackObj && msg.slackObj.fromUser == '')\n    return;\nif(msg.slackObj){\n    node.warn(msg.slackObj)\n    if(msg.slackObj.text[1] == 'h' && msg.slackObj.text[2] == 't'){\n        msg.payload = msg.slackObj.text.split('<')[1].split('>')[0];\n        return [msg,null];\n    }\n}\n\nif(msg.slackObj&&msg.payload.indexOf('add') != '-1'){\n    var a = msg.payload.split(\"add\")[1];\n    var lat = a.split(\",\")[0];\n    var b = a.split(\",\")[1];\n    var lon = b.split(\"\\\"\")[0];\n}\nif(msg.isLine&&msg.payload[0] == 'h' && msg.payload[1] == 't'){\n    return [msg,null];\n}\nif(msg.isLine&&msg.payload.indexOf('add') != '-1'){\n    var a = msg.payload.split(\"add\")[1];\n    var lat = a.split(\",\")[0];\n    var lon = a.split(\",\")[1];\n}\nmsg.lon = lon;\nmsg.lat = lat;\nreturn [null,msg];",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 687,
+        "y": 392,
+        "wires": [
+            [
+                "9091382d.d79bd8",
+                "ebc16232.109ac"
+            ],
+            [
+                "ca0eec81.a9ee38"
+            ]
+        ]
+    },
+    {
+        "id": "ff39f6f8.661e2",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "result",
+        "x": 1203,
+        "y": 168,
+        "wires": []
+    },
+    {
+        "id": "ebc16232.109ac",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 892.9999694824219,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "739a0c1a.e98c24",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 487,
+        "y": 272,
+        "wires": []
+    },
+    {
+        "id": "5237c3f8.47370c",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 341.9999694824219,
+        "y": 444,
+        "wires": []
+    },
+    {
+        "id": "d31653ce.33a038",
+        "type": "visual-recognition-v3",
+        "z": "8a10d260.97ada",
+        "name": "VR",
+        "apikey": "",
+        "image-feature": "classifyImage",
+        "lang": "en",
+        "x": 1067,
+        "y": 272,
+        "wires": [
+            [
+                "ff39f6f8.661e2",
+                "48f64f0.cef07b"
+            ]
+        ]
+    },
+    {
+        "id": "5d3e8196.e3e0e",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "user_processes",
+        "func": "/**\n * a simple function handle user_processes mapping in global scope\n * user_processes = { bpm_user : [bpm_processId]};\n */\nfunction userProcesses(bpm_user){\n    var bpm_processId = new Date().toISOString();\n    var user_processes = global.get('user_processes');\n    if(!user_processes){\n        user_processes = {};\n        user_processes[bpm_user] = [bpm_processId];\n        global.set('user_processes', user_processes);\n    } else {\n        // find bpm_processId of the user\n        user_processes = global.get('user_processes');\n        if(!user_processes[bpm_user]){\n            user_processes[bpm_user] = [bpm_processId];\n        } else {\n            user_processes[bpm_user].push(bpm_processId);\n        }\n    }\n    node.warn('user_processes='+JSON.stringify(global.get('user_processes')));\n    //global.set('user_processes', null);\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2188.6828079223633,
+        "y": 1681.3849639892578,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "626e9159.96d4a",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "AutoTaskDone",
+        "func": "var bpmtools = global.get('bpmtools');\n\nvar doLog = true;\nfunction log(doLog, eventName) {\n    if (doLog) {\n\t    node.warn(\"bpm.AutotaskDone: \" + eventName);\n    }\n}\n\n// handle process, @processId - a unique id of a process instance to perform\nif(!msg.bpm_processId){\n    node.error('bpm.AutoTaskDone: Error of no msg.bpm_processId');\n}\nvar processId = msg.bpm_processId;\nvar data = msg.payload.bpm_data;\n\nvar bpmProcess = null;\ntry{\n    bpmProcess = bpmtools.getProcessById(processId);\n}catch(err){\n    node.error('AutoTaskDone throws error:'+err);\n}\n//\nif(bpmProcess){\n    var state;\n\tvar curIndex;\n\tvar curTaskName;\n\tvar lastTaskName;\n\t(function loop() {\n\t    // check if process is completed; no further process-state to forward\n        state = bpmProcess.getState();\n\t    if (state.tokens.length > 0 ) {\n\t        curIndex = state.tokens.length - 1;\n\t        curTaskName = state.tokens[curIndex].position;\n\t        if(curTaskName === lastTaskName){\n\t            return;     // same taskName, no need to move a step forward.\n\t        }\n\t        // perform taskDone \n\t        log(doLog, 'before taskDone('+curTaskName+'), data='+JSON.stringify(data));\n\t        try{\n\t            bpmProcess.taskDone(curTaskName, data);\n\t        }catch(err){\n\t            log(true, 'bpmProcess.taskDone throws error:'+err);\n\t        }\n            // waiting for taskDone's returned data\n            // TODO: TBD of better waiting mechanism; process.nextTick is not work.\n            setTimeout(function() {\n                msg.payload = { bpm_data : data };\n\t            log(doLog, 'after taskDone('+curTaskName+'), data='+JSON.stringify(msg.payload.bpm_data));\n\t            // be sure to send(msg) in asynchronously, else messaging 傳送異常.\n\t            node.send(msg);\n\t            // clear bpm_data.output to [], else last output text remained.\n\t            data.output = [];\n                lastTaskName = curTaskName;\n\t            loop(); // loop() of each call will be done in a separate tick. Better performance design.\n            }, 1000);\n\t   }\n    }());\n}\nreturn;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2190,
+        "y": 1742.000015258789,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ef6a1434.a4618",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "NLU",
+        "func": "/**\n * NLU, Understand Intention of a language. Apply NLC here to understand user's intention\n * @ bpm_user. (currently use 'fromUser' of slack bots). TODO: new bot impletmentation.\n * return NLU \n */\n\nif(!msg.bpm_user){\n    msg.bpm_user = 'simple_test';       // a test case only.\n}\n\nreturn msg;",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 2018.2856483459473,
+        "y": 1617.8095455169678,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "beaa7ee8.a841c",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "Ticket data",
+        "func": "// convert tickets to tickets_data to meet FB Airline Itinerary Template.\nvar tickets = msg.payload.bpm_data.tickets;\nvar tickets_data = [];          // holding all tickets data\n\nif(tickets){\n    for(var i=0; i<tickets.length; i++){\n        var ticket = tickets[i];\n        var d = {               // a ticket data\n            passenger_info : {},\n            flight_info : {},\n            passenger_segment_info : {}\n        };\n        d.passenger_info = {\n            name : ticket.bpm_user,\n            ticket_number : ticket.bpm_processId\n        };\n        var orderInfo = {\n            segment_id : 'orderInfo',\n            departure_airport : {\n                airport_code : ticket.orderInfo.dep_place,\n                city : ticket.orderInfo.dep_place\n            },\n            arrival_airport : {\n                airport_code : ticket.orderInfo.arv_place,\n                city : ticket.orderInfo.arv_place\n            },\n            flight_schedule : {\n                departure_time : ticket.orderInfo.dep_date+\"T22:45\",\n                arrival_time   : ticket.orderInfo.dep_date+\"T17:20\"\n            },\n            travel_class : ticket.orderInfo.fly_class\n        };\n        d.flight_info.orderInfo = orderInfo;\n        d.passenger_segment_info.orderInfo = {segment_id : 'orderInfo'};\n        //\n        var returnTripInfo = ticket.returnTripInfo;\n        if(returnTripInfo){\n            var returnTripInfo = {\n              segment_id : 'returnTripInfo',\n              departure_airport : {\n                airport_code : ticket.returnTripInfo.dep_place,\n                city : ticket.returnTripInfo.dep_place\n              },\n              arrival_airport : {\n                airport_code : ticket.returnTripInfo.arv_place,\n                city : ticket.returnTripInfo.arv_place\n              },\n              flight_schedule : {\n                departure_time : ticket.returnTripInfo.dep_date+\"T22:45\",\n                arrival_time   : ticket.returnTripInfo.dep_date+\"T17:20\"\n              },\n              travel_class : ticket.returnTripInfo.fly_class\n            };\n            d.flight_info.returnTripInfo = returnTripInfo;\n            d.passenger_segment_info.returnTripInfo = {segment_id : 'returnTripInfo'};\n        }\n        tickets_data.push(d);\n        //node.warn('ticket data='+JSON.stringify(d));\n    }\n}\nmsg.payload.tickets_data = tickets_data;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2178.9690170288086,
+        "y": 1618.359531402588,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5dbefc1.b4d47",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "url",
+        "x": 1717,
+        "y": 492,
+        "wires": []
+    },
+    {
+        "id": "82820b9a.efe53",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1467,
+        "y": 492,
+        "wires": []
+    },
+    {
+        "id": "f09d3e8a.e38cf8",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 2167,
+        "y": 492,
+        "wires": []
+    },
+    {
+        "id": "3ce6e16c.cdebbe",
+        "type": "http request",
+        "z": "8a10d260.97ada",
+        "name": "jBPM-Telecom",
+        "method": "use",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 1737,
+        "y": 412,
+        "wires": [
+            [
+                "135896a4.c5cda9",
+                "f4f6a46d.01ced8"
+            ]
+        ]
+    },
+    {
+        "id": "135896a4.c5cda9",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "parse response",
+        "func": "//var descript = msg.payload.split(\"\\\"\")[5];\n//var tx = msg.payload.split(\"\\\"txid\\\":\")[1].split(\"}\")[0];\n//var returnCode = msg.payload.split(\"\\\"returnCode\\\":\")[1].split(\",\")[0];\nmsg.payload = JSON.parse(msg.payload);\nvar descript = msg.payload[\"ns1.ResultBean\"][\"description\"];\nvar tx = msg.payload[\"ns1.ResultBean\"][\"txid\"];\nvar returnCode = msg.payload[\"ns1.ResultBean\"][\"returnCode\"];\n\nvar tmp = global.get(\"txidTable\");\nvar newmsg = global.get(\"oldmsg\");\nvar name = newmsg.bpm_user;\n\nnode.warn(returnCode);\nif(tmp[name] == \"\"){\n    tmp[name] = tx.toString();\n    node.warn(tmp);\n    global.set(\"txidTable\", tmp);\n}\nif(returnCode==\"999999\"){\n    tmp[name] = \"\";\n    global.set(\"txidTable\", tmp);\n}\nvar s =\"\";\nif(global.get(\"mapurl\")!=\"\"){\n    s=global.get(\"mapurl\")+\"\\n\";\n    node.warn(s);\n    global.set(\"mapurl\",\"\");\n}\nvar b = new Buffer(descript,'base64');\ns+= b.toString();\nnode.warn(s);\nvar t = {\"text\":s};\nmsg = newmsg;\nmsg.bpm_data.output.push(t);\nnode.warn(msg);\nif(returnCode==\"999999\"){\n    // if(global.get(\"finish\")==\"bye\"){\n    //     node.warn(newmsg.payload.bpm_data.input.finish);\n    //     global.set(\"finish\",\"boo\");\n        return [msg,null];\n    // }\n    // msg.method = 'GET';\n    // msg.headers = { \n    //     'Content-Type':'application/json' \n    // };\n    // newmsg.payload.bpm_data.input.finish=\"bye\";\n    // msg.url ='http://54.251.141.246:8080/air-poc/poc/contAirlineService?txid='+tx+'&content='+JSON.stringify(newmsg.payload.bpm_data);\n    // global.set(\"finish\", \"bye\");\n    // return [null,msg];\n}else{\n    return [msg,null];\n}\n",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 1957,
+        "y": 412,
+        "wires": [
+            [
+                "f09d3e8a.e38cf8",
+                "900f713.223301",
+                "4257f553.e8b5a4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "20579abc.b4b56e",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "NLP2Telecom",
+        "func": "\nvar telecom = msg.payload.result.Telecom;\nvar common = msg.payload.result.Common;\nvar bpm_data = msg.payload.bpm_data;\nvar table = {'一':1, '二':2, '三':3,'四':4,'五':5,'六':6,'日':7,'天':7};\nfunction convertDate(sdate){\n    if(!sdate || typeof sdate === 'undefined' || sdate.indexOf('date!')===-1){\n\t    return sdate;\n    }\n    var parts = sdate.split('-');\n    if(parts.length>0){\n\tvar i = sdate.indexOf('!',0);\n\tvar yyyy = parts[0].slice(i+1);\n\tif(yyyy==='0'){\n\t    yyyy = new Date().getUTCFullYear();\n\t}\n\tvar mm = parts[1];\n\tif(mm.length===1){\n\t    mm = '0'+parts[1];\n\t}\n\tvar dd = parts[2];\n\tif(dd.length===1){\n\t    dd = '0'+parts[2];\n\t}\n\tvar s = yyyy+'-'+mm+'-'+dd;\n\treturn s;\n    }\n}\n\nif(telecom){\n    //node.warn('NLP2retail bpm_data.input retail='+JSON.stringify(retail));\n    for(var i=0; i<telecom.length; i++){\n        if(!telecom[i].$)\n            continue;\n        var v = telecom[i].$;\n        //node.warn('NLP2retail bpm_data.input v='+JSON.stringify(v));\n        if(v.metaType === 'ProCat'){            // 命令語句, 訂單號碼\n            bpm_data.input.pro_cat = v.classValue;\n            bpm_data.input.pro_caturl = v.classType;\n            bpm_data.input[v.classType] = v.classValue;\n            \n        } else {\n            bpm_data.input[v.classType] = v.classValue;\n        }\n    }\n}\nif(common){\n    for(var i=0; i<common.length; i++){\n        if(!common[i].$)\n            continue;\n        var v = common[i].$;\n        if(v.metaType === 'AirCon'){            // 命令語句, 訂單號碼\n            bpm_data.input.product_category = v.classValue;\n            bpm_data.input[v.classType] = v.classValue;\n            \n        } \n        else if(v.metaType === 'DateInfo'){\n            bpm_data.input.isDate = 'true';\n            bpm_data.input[v.classType] = v.classValue;\n        }\n        else {\n            bpm_data.input[v.classType] = v.classValue;\n        }\n        \n    }\n}\n\nbpm_data.input.longtitude = msg.lon;\nbpm_data.input.latitude = msg.lat;\n// txid='20161201020825160'; \n\n\nmsg.payload.bpm_data = bpm_data;\n//global.set(\"oldmsg\", msg);\n\nnode.warn(msg.payload);\n\nreturn msg;",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 1257,
+        "y": 412,
+        "wires": [
+            [
+                "703340c0.f41a18",
+                "82820b9a.efe53"
+            ]
+        ]
+    },
+    {
+        "id": "7a95dd9e.b549ac",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "func": "global.set('txidTable', {});\nglobal.set('relativeTable',{});\nmsg.uima_url = context.global.process.env['uima_url'];\nmsg.jbpm_url = context.global.process.env['jbpm_url'];\n//msg.jbpm_url = 'http://ec2-54-186-105-165.us-west-2.compute.amazonaws.com:8280/insure-poc/poc/';\n//msg.uima_url = 'http://dev-uima-insurance.mybluemix.net/uima-rest-server/?mode=form&mode=xml&lang=zh_TW&text=';\nmsg.payload = JSON.parse(\"{\\\"ns1.ResultBean\\\":{\\\"description\\\":\\\"6KuL5ZWP5oKo6ZyA6KaB5ZOq6aCF5pyN5YuZ77yfKOioguapn+elqOOAgeaUueapn+elqOOAgeafpeipouiIquePreizh+ioiuOAgeWVhuWTgeWFjOaPmyk=\\\",\\\"returnCode\\\":\\\"00000000\\\",\\\"txid\\\":\\\"20161202150025024\\\"}}\");\nmsg.descript = msg.payload[\"ns1.ResultBean\"][\"description\"];\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 302.0000457763672,
+        "y": 96,
+        "wires": [
+            [
+                "8eef449a.f8e5e8"
+            ]
+        ]
+    },
+    {
+        "id": "f82dc437.d305c8",
+        "type": "inject",
+        "z": "8a10d260.97ada",
+        "name": "init table",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "x": 132.00006103515625,
+        "y": 96,
+        "wires": [
+            [
+                "7a95dd9e.b549ac"
+            ]
+        ]
+    },
+    {
+        "id": "8eef449a.f8e5e8",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 450,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "bdca1ddd.43c58",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "Google Map",
+        "func": "var GoogleMapsAPI = global.get('GoogleMapsAPI');\nvar bpm_data = msg.bpm_data;\nvar address=[\n    [25.0926049,121.5180062,'台北士林店_台北市士林區基河路258號'],\n    [25.0621857,121.5719164,'台北內湖店_台北市內湖區新湖三路23號B1'],\n    [25.029358,121.4204312,'台北新莊店_新北市新莊區中正路620號'],\n    [25.0018849,121.493549, '台北中和店_新北市中和區中山路二段291號3-4F'],\n    [24.9761049,121.5444012, '台北新店店_新北市新店區中興路三段1號4F'],\n    [24.9833595,121.4567291, '台北土城店_新北市土城區青雲路152號2樓'],\n    [24.9460135,121.3800628, '台北三峽店_新北市樹林區大成路85號B1'] ];\n    // 25.0796562,121.2320283,'桃園國際機場'\nif (bpm_data.input.longtitude && bpm_data.input.latitude){\n    var usr_lon = bpm_data.input.longtitude;//this.getProperty('user_lon');\n    var usr_lat = bpm_data.input.latitude;//this.getProperty('user_lat');\n    var min_dist = 100000;\n    var target;\n\n    for(var i = 0; i < address.length; i++){\n        var a = address[i][0];\n        var b = address[i][1];\n        var dis = (usr_lat - a) * (usr_lat - a) + (usr_lon - b) * (usr_lon - b);\n        if(dis < min_dist){\n            min_dist = dis;\n            target = i;\n        }\n    }\n    var publicConfig = {\n     key: 'AIzaSyCCU9egtsvQlbTHSsIVErAKcoT872s_HJM',\n     stagger_time:       1000, // for elevationPath\n     encode_polylines:   false,\n     secure:             true, // use https\n     proxy:              'http://127.0.0.1:9999' // optional, set a proxy for HTTP requests\n    };\n    var gmAPI = new GoogleMapsAPI(publicConfig);\n    var dest_lat = address[target][0];\n    var dest_lon = address[target][1];\n    var start = (usr_lat + dest_lat)/2;\n    var end = (usr_lon + dest_lon)/2;\n    var str1 =  start.toString()+','+end.toString();\n    var params = {\n     center: usr_lat.toString()+','+usr_lon.toString(),\n     zoom: 12,\n     size: '500x400',\n     maptype: 'roadmap',\n     markers: [\n       {\n         location: usr_lat.toString()+','+usr_lon.toString(),\n         label   : 'A',\n         color   : 'green',\n         shadow  : true\n       },\n       {\n         location: dest_lat.toString()+','+dest_lon.toString(),\n         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe%7C996600'\n       }\n     ],\n     style: [\n       {\n         feature: 'road',\n         element: 'all',\n         rules: {\n           hue: '0x00ff00'\n         }\n       }\n     ],\n     path: [\n       {\n         color: '0x0000ff',\n         weight: '5',\n         points: [\n           usr_lat.toString()+','+usr_lon.toString(),\n           dest_lat.toString()+','+dest_lon.toString()\n         ]\n       }\n     ]\n    };\n    var url = gmAPI.staticMap(params); // return static map URL\n    global.set(\"mapurl\", url);  \n    msg.payload=url\n    msg.bpm_data.output.push({\"text\":url});\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1727,
+        "y": 332,
+        "wires": [
+            [
+                "5b186042.5dbe28",
+                "4257f553.e8b5a4"
+            ]
+        ]
+    },
+    {
+        "id": "5b186042.5dbe28",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1907,
+        "y": 332,
+        "wires": []
+    },
+    {
+        "id": "703340c0.f41a18",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "TimeHandler",
+        "func": "function handleTime(input, relative_date){\n    console.log('start function');\n    var dic = {'這個月':0, '下個月':1};\n    var change = {'一':1,'ㄧ':1,'二':2,'三':3,'四':4,'五':5,'六':6,'日':7,'天':7};\n    var MyDate = new Date();\n    var year = 0, month = 0, day = 0;\n    var start_month = -1, end_month = -1;\n    var start_date = -1, end_date = -1;\n    var start_hour = -1, end_hour = -1;\n    var start_min = -1, end_min = -1;\n    var this_quarter = 0;\n    var start='G', end='G';\n    \n    if(input.hour){\n        start_hour = parseInt(input.hour);\n        end_hour = start_hour;\n        if(input.hour_plus_half){\n            start_min = 30;\n            end_min = start_min;\n        }\n        else{\n            start_min = 0;\n            end_min = 0;\n        }\n    }\n    if(input.min){\n        start_min = parseInt(input.min);\n        end_min = parseInt(input.min);\n    }\n    if(input.period_day){\n        var isPM; //0:AM ; 1:PM\n        AM = [\"半夜\",\"凌晨\",\"清晨\" ,\"早上\"];\n        PM = [\"中午\",\"下午\",\"傍晚\" ,\"晚上\"];\n        if (AM.indexOf(input.period_day) >= 0){\n            node.warn(\"am\");\n            isPM = 0;\n        }\n        else if(PM.indexOf(input.period_day) >= 0){\n            node.warn(\"pm\");\n            isPM = 1;\n        }\n        //Default\n        else\n            isPM = 0;\n\n        if(input.hour){\n            start_hour = parseInt(input.hour)%12 + 12*isPM;\n            end_hour = start_hour; \n        }\n        if(input.hour_plus_half){\n            start_hour = parseInt(input.hour_plus_half)%12 + 12*isPM;\n            end_hour = start_hour;\n            start_min = 30;\n            end_min = start_min;\n        }\n        node.warn(start_hour);\n    }\n    var Ryear, Rmonth, Rdate;\n    if(!relative_date){\n        Ryear = MyDate.getFullYear();\n        Rmonth = MyDate.getMonth()+1;\n        Rdate = MyDate.getDate();\n    }\n    else{\n        Ryear = parseInt(relative_date.split('/')[0]);\n        Rmonth = parseInt(relative_date.split('/')[1]);\n        Rdate = parseInt(relative_date.split('/')[2]);\n    }\n    node.warn(\"relative =\" + Ryear +'-'+ Rmonth +'-'+ Rdate);\n    if(input.same_day){\n        year = Ryear;\n        start_month = Rmonth;\n        end_month = start_month;\n        start_date = Rdate;\n        end_date = start_date;\n    }\n    else if(input.day_after_that){\n        year = Ryear;\n        start_month = Rmonth;\n        end_month = start_month;\n        start_date = Rdate+1;\n        end_date = start_date;\n        \n    }\n    else if(input.days_from_now){\n        year = Ryear;\n        start_month = Rmonth;\n        end_month = start_month;\n        start_date = Rdate + parseInt(input.days_from_now);\n        end_date = start_date;\n    }\n    else if(input.days_before_now){\n        year = Ryear;\n        start_month = Rmonth;\n        end_month = start_month;\n        start_date = Rdate - parseInt(input.days_before_now);\n        end_date = start_date;\n    }\n    \n    if(input.now){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate();\n        end_date = start_date;\n        start_hour = MyDate.getHours()+8;\n        end_date = start_date;\n        start_min = MyDate.getMinutes();\n        end_min = start_min;\n    }\n    // day\n    if(input.today){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate();\n        end_date = start_date;\n    }\n    else if (input.tomorrow){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()+1;\n        end_date = start_date;\n\n    }\n    else if(input.the_day_after_tomorrow){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()+2;\n        end_date = start_date;\n    }\n    else if(input.three_days_from_now){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()+3;\n        end_date = start_date;\n    }\n    else if(input.yesterday){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()-1;\n        end_date = start_date;\n    }\n    else if(input.the_day_before_yesterday){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()-2;\n        end_date = start_date;\n    }\n    else if(input.three_days_ago){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        start_date = MyDate.getDate()-3;\n        end_date = start_date;\n    }\n    \n    //handle this_week, next_week \n    // ONLY for classValue = 一,二,三,四,五,六,日 ; not include 這週, 下週\n    if(input.last_two_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var today_day = MyDate.getDay();\n        if(input.last_two_week in change){\n            var target_day = change[input.last_two_week];\n            var differ = today_day - target_day;\n            start_date = MyDate.getDate() - differ - 14;\n            end_date = start_date; \n        }\n        else{\n            start_date = MyDate.getDate() - today_day - 13;\n            end_date = start_date + 6;\n        }\n    }\n    else if(input.last_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var today_day = MyDate.getDay();\n        if(input.last_week in change){\n            var target_day = change[input.last_week];\n            var differ = today_day - target_day;\n            start_date = MyDate.getDate() - differ - 7;\n            end_date = start_date; \n        }\n        else{\n            start_date = MyDate.getDate() - today_day - 6;\n            end_date = start_date + 6;\n        }\n    }\n    else if(input.next_two_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var today_day = MyDate.getDay();\n        if(input.next_two_week in change){\n            var target_day = change[input.next_two_week];\n            var differ = today_day - target_day;\n            start_date = MyDate.getDate() - differ + 14;\n            end_date = start_date; \n        }\n        else{\n            start_date = MyDate.getDate() - today_day + 15;\n            end_date = start_date + 6;\n        }\n    }\n    else if(input.this_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var today_day = MyDate.getDay();\n        if(input.this_week in change){\n            var target_day = change[input.this_week];\n            var differ = today_day - target_day;\n            start_date = MyDate.getDate() - differ;\n            end_date = start_date; \n        }\n        else{\n            start_date = MyDate.getDate() - today_day + 1;\n            end_date = start_date + 6;\n        }\n    }\n    else if(input.next_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var today_day = MyDate.getDay();\n        if(input.next_week in change){\n            var target_day = change[input.next_week];\n            var differ = today_day - target_day;\n            start_date = MyDate.getDate() - differ + 7;\n            end_date = start_date; \n        }\n        else{\n            start_date = MyDate.getDate() - today_day + 8;\n            end_date = start_date + 6;\n        }\n    }\n    \n    \n    //period_week\n    if(input.period_week){\n        year = MyDate.getFullYear();\n        start_month = MyDate.getMonth()+1;\n        end_month = start_month;\n        var weekShift = 0; //0:this_week ; 1:next_week ; (2:next_two_week)\n        var today_day = MyDate.getDay();\n\n        if (input.this_week =='這週'){\n            whichWeek = 0;\n        }\n        else if(input.next_week == '下週'){\n            whichWeek = 1;\n        }\n        else if(input.last_week){\n            whichWeek = -1;\n        }\n        //Default\n        else\n            whichWeek = 0;\n\n        switch(input.period_week){\n            case '週間':\n                start_date = MyDate.getDate() - today_day + 1 + whichWeek*7;\n                end_date = start_date + 4;\n                break;\n            case \"週末\":\n                start_date = MyDate.getDate() - today_day + 6 + whichWeek*7;\n                end_date = start_date + 1;\n                break;\n            default:\n                console.log('error_period_week');\n        }\n    }\n   \n    //-----月份日期------\n    if(input.date){\n        console.log('date');\n        timeString = input.date.split('!')[1];\n        console.log('timestring:' + timeString);\n        var year_t = timeString.split('-')[0];\n        var month_t = timeString.split('-')[1];\n        var day_t = timeString.split('-')[2];\n        \n        if(year_t != 0)\n            year = year_t;\n        if(month_t != 0){\n            start_month = month_t;\n            end_month = month_t;\n        }\n        if(day_t != 0){\n            start_date = day_t;\n            end_date = day_t;\n        } \n        console.log('after date: '+year +'/'+start_month+'/'+end_month+'/'+start_date+'/'+end_date);    \n    }\n    if(input.year){\n\t\tyear = input.year;\n\t\t\n\t}\n\n\tif(input.month){\n\t\tstart_month = input.month;\n\t\tend_month = input.month;\n\t}\n\n\tif(input.day){\n\t\tstart_date = input.day;\n\t\tend_date = input.day;\n\t}\n    // ----月頭月尾------\n    if(input.period_month){\n        switch(input.period_month){\n            case '月初':\n                    start_date = 1;\n                    end_date = 10;\n                break;\n            case \"月中\":\n                    start_date = 11;\n                    end_date = 20;\n                break;\n            case \"月底\":\n                    start_date = 21;\n                    end_date = 33;\n                break;\n            default:\n                console.log('error_period_month');\n        }\n    }\n    //DEFAULT \n    /*\n    if(start_date == -1 && end_date == -1){\n        start_date = 1;\n        end_date = -33;\n    }\n    */\n    //this_month\n    if(input.this_month){\n        start_month = MyDate.getMonth()+1;\n        end_month = MyDate.getMonth()+1;\n    }\n    //next_month \n    else if (input.next_month){\n        start_month = MyDate.getMonth()+2;\n        end_month = MyDate.getMonth()+2;\n    }\n    else if (input.last_month){\n        start_month = MyDate.getMonth();\n        end_month = MyDate.getMonth();\n    }\n    //------\n    else if(input.period_quarter){\n        var whichQuarter = 0;\n        if(input.quarter){\n            switch(input.quarter){\n                case '第一季':\n                        whichQuarter = 1;\n                    break;\n                case \"第二季\":\n                        whichQuarter = 2;\n                    break;\n                case '第三季':\n                        whichQuarter = 3;\n                    break;\n                case \"第四季\":\n                        whichQuarter = 4;\n                    break;\n                default:\n                    console.log('error_quarter');\n            }\n        }\n        else if (input.this_quarter){\n            whichQuarter = Math.floor(MyDate.getMonth() / 3) + 1;\n        }\n        else if(input.next_quarter){\n            whichQuarter = Math.floor(MyDate.getMonth() / 3) + 2;\n        }\n        else if (input.last_quarter){\n            whichQuarter = Math.floor(MyDate.getMonth() / 3) ;\n        }\n\n        //Default\n        else\n            whichQuarter = Math.floor(MyDate.getMonth() / 3) + 1;\n    \n        node.warn(\"quarter = \" + whichQuarter);\n        switch(input.period_quarter){\n            case '季初':\n                    start_month = 3*(whichQuarter-1)+1;\n                    end_month = start_month;\n                break;\n            case \"季末\":\n                    start_month = 3*(whichQuarter-1)+3;\n                    end_month = start_month;\n                break;\n            default:\n                console.log('error_period_quarter');\n        }\n    }\n    //this_quarter\n    else if (input.this_quarter){\n        var s = Math.floor(MyDate.getMonth() / 3) + 1;\n        start_month = 3*(s-1)+1;\n        end_month = start_month+2;  \n    }\n    //next_quarter\n    else if (input.next_quarter){\n        var s = Math.floor(MyDate.getMonth() / 3) + 1;\n        start_month = 3*s+1;\n        end_month = start_month+2;\n    }\n    else if (input.last_quarter){\n        var s = Math.floor(MyDate.getMonth() / 3) + 1;\n        start_month = 3*(s-2)+1;\n        end_month = start_month+2;\n    }\n    //----季------\n    else if(input.quarter){\n        switch(input.quarter){\n            case '第一季':\n                    start_month = 1;\n                    end_month = 3;\n                break;\n            case \"第二季\":\n                    start_month = 4;\n                    end_month = 6;\n                break;\n            case '第三季':\n                    start_month = 7;\n                    end_month = 9;\n                break;\n            case \"第四季\":\n                    start_month = 10;\n                    end_month = 12;\n                break;\n            default:\n                console.log('error_quarter');\n        }   \n    }\n    //------季節--------\n    else if(input.season_flag){\n        console.log(input.season_flag);\n        switch(input.season_flag){\n            case '春':\n                    start_month = 3;\n                    end_month = 5;\n                break;\n            case \"夏\":\n                    start_month = 6;\n                    end_month = 8;\n                break;\n            case '秋':\n                    start_month = 9;\n                    end_month = 11;\n                break;\n            case \"冬\":\n                    start_month = 12;\n                    end_month = 14;\n                break;\n            default:\n                console.log('error_season_flag');\n        }   \n    }\n    //----年頭年尾----\n    else if(input.period_year){\n        switch(input.period_year){\n            case '年初':\n                    start_month = 1;\n                    end_month = 4;\n                break;\n            case \"年中\":\n                    start_month = 5;\n                    end_month = 8;\n                break;\n            case \"年底\":\n                    start_month = 9;\n                    end_month = 12;\n                break;\n            default:\n                console.log('error_period_year');\n        }\n    }\n    //Default\n    if(start_min == -1 && end_min == -1){\n        start_min = 0;\n        end_min = 59;\n    }\n    if(start_hour == -1 && end_hour == -1){\n        start_hour = 0;\n        end_hour = 23;\n    }\n    if(start_date == -1){\n        if(start_hour != end_hour){\n            start_date = 1;\n            end_date = -33;\n        }\n        else{\n            start_date = MyDate.getDate();\n            end_date = start_date;\n        }\n    }\n    if(start_month == -1 && end_month == -1){\n        if(start_date == end_date){\n            start_month = MyDate.getMonth()+1;\n            end_month = MyDate.getMonth()+1;        \n        }\n        else{\n            start_month = 1;\n            end_month = 12;\n        }\n    }\n    if(input.this_year){    \n        year = MyDate.getFullYear();    \n    }\n    else if(input.next_year){\n        year = MyDate.getFullYear()+1;  \n    }\n    else if(input.next_two_year){\n        year = MyDate.getFullYear()+2;  \n    }\n    else if(input.last_year){\n        year = MyDate.getFullYear()-1;  \n    }\n    else if(input.last_two_year){\n        year = MyDate.getFullYear()-2;  \n    }\n    // Default\n    if(year == 0){\n        year = MyDate.getFullYear();\n    }\n    \n    //console.log('almost');\n    console.log('DEBUG: ' + year + ' '+ start_month + ' '+end_month + ' '+start_date + ' '+end_date);\n    var out_start = new Date(year, start_month-1, start_date, start_hour, start_min);\n    if(end_date != -33){\n        var out_end = new Date(year, end_month-1, end_date, end_hour, end_min);\n        var last_day = out_end;\n    }\n    else{\n        var tmp = new Date(year, end_month, 0);\n        var out_end = new Date(year, end_month-1, tmp.getDate(),end_hour, end_min);\n        var last_day = new Date(out_end.getFullYear(), out_end.getMonth()+1, 0);\n    }\n    \n    start = out_start.getFullYear() +'/'+  ('0' + (out_start.getMonth()+1)).slice(-2)+'/'+ ('0' + (out_start.getDate())).slice(-2) +' '+  ('0' + (out_start.getHours())).slice(-2)+':'+('0' + (out_start.getMinutes())).slice(-2);\n    end = out_end.getFullYear() +'/'+  ('0' + (out_end.getMonth()+1)).slice(-2) +'/'+  ('0' + (out_end.getDate())).slice(-2)+ ' '+('0' + (out_end.getHours())).slice(-2)+':'+ ('0' + (out_end.getMinutes())).slice(-2);\n    rel = out_start.getFullYear() +'/'+ ('0' + (out_start.getMonth()+1)).slice(-2) +'/'+ ('0' + (out_start.getDate())).slice(-2);\n    //console.log('done');\n    return [start, end, rel];\n}\n\nvar relTable = global.get(\"relativeTable\");\nvar input = msg.payload.bpm_data.input;\nvar time=[];\nvar relative = relTable[msg.bpm_user];\nnode.warn(\"rel =\" + relative);\nif(input.isDate){\n    time = handleTime(input, relative);\n    msg.payload.bpm_data.input.mytime = time[0];\n    msg.payload.bpm_data.input.venue_start_date = time[0];\n    msg.payload.bpm_data.input.venue_end_date = time[1];\n    if(time[2].indexOf('N')==-1)\n        relTable[msg.bpm_user] = time[2];\n}\nnode.warn(\"start = \" + time[0]);\nnode.warn(\"end = \" + time[1]);\nnode.warn(\"rel = \" + time[2]);\n//msg.payload.bpm_data.output.push({\"text\":time[0] + \" / \" + time[1]});\nreturn msg;\n\nvar Table = global.get('txidTable');\nvar txid = Table[msg.bpm_user];\nnode.warn(\"txid=\"+txid);\n\nif(!txid){\n    Table[msg.bpm_user]=\"\";\n    msg.method = 'GET';\n    msg.headers = { \n        'Content-Type':'application/json' \n    };\n    msg.url =context.global.process.env['jbpm_url'] + 'initAirlineService?content='+JSON.stringify(msg.payload.bpm_data);\n    //msg.url ='http://ec2-54-186-105-165.us-west-2.compute.amazonaws.com:8280/insure-poc/poc/' + 'initAirlineService?content='+JSON.stringify(msg.payload.bpm_data);\n}\nelse{\n    msg.method = 'GET';\n    msg.headers = { \n        'Content-Type':'application/json' \n    };\n    msg.url =context.global.process.env['jbpm_url'] + 'contAirlineService?txid='+txid+'&content='+JSON.stringify(msg.payload.bpm_data);\n    //msg.url ='http://ec2-54-186-105-165.us-west-2.compute.amazonaws.com:8280/insure-poc/poc/' + 'contAirlineService?txid='+txid+'&content='+JSON.stringify(msg.payload.bpm_data);\n}\nmsg.url = encodeURI(msg.url);\nnode.warn(\"msg.url=\"+msg.url);\nmsg.bpm_data = msg.payload.bpm_data;\nglobal.set(\"oldmsg\", msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1467,
+        "y": 412,
+        "wires": [
+            [
+                "b5dbefc1.b4d47",
+                "ede51e89.790de"
+            ]
+        ]
+    },
+    {
+        "id": "f4f6a46d.01ced8",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1927,
+        "y": 492,
+        "wires": []
+    },
+    {
+        "id": "2721635e.75e9c4",
+        "type": "watson-natural-language-classifier",
+        "z": "3103d2a4.d55e76",
+        "name": "NLC-Telecom-ServiceType",
+        "mode": "classify",
+        "language": "en",
+        "classifier": "ff18c7x157-nlc-2531",
+        "x": 380,
+        "y": 380,
+        "wires": [
+            [
+                "810fd535.802248"
+            ]
+        ]
+    },
+    {
+        "id": "cdcef4d4.18d728",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "NLU",
+        "func": "/**\n * NLU, Understand Intention of a request. Apply NLC here to understand user's intention\n * return NLU msg.payload.top_class\n */\n// if(!msg.bpm_user){\n//     node.error('NLU throws error: no msg.bpm_user');\n// }\n\n//node.warn('top_class='+msg.payload.top_class+', '+JSON.stringify(msg.payload.classes));\nvar confident = 0.55;\nvar classes = msg.payload.classes;\nif(classes && classes.length>0){        \n    if(classes[0].confidence<confident){\n        // unknow of user intention.\n        msg.nlu.top_class = 'unknown';\n        msg.nlu.classes = classes;\n        node.warn('NLU top_class low confidence:'+msg.nlu.text+', '+JSON.stringify(msg.payload.classes));\n    } else {\n        if(classes[0].confidence>0.8)\n            global.set('intention', 'high');\n        else\n            global.set('intention', 'low');\n        // reassign to msg.nlc.top_class to by pass NLC http overriding of msg.payload.\n        msg.nlu.top_class = msg.payload.top_class;\n        if(msg.nlu.top_class=='Delay'||msg.nlu.top_class=='Disease'||msg.nlu.top_class=='Injury'||msg.nlu.top_class=='Cancellation'||msg.nlu.top_class=='inquiry')\n             global.set('status', 'jbpm');\n        else\n            global.set('status', 'con');\n        msg.nlu.classes = classes;\n    }\n    \n}\n\nif(!msg.bpm_user){\n    msg.bpm_user = 'simple831';       // a test case only.\n}\n\nvar top_class = msg.nlu.top_class;\nmsg.payload = msg.nlu.text;         // reassign input text to payload\n\nmsg.url = 'http://dev-uima-insurance.mybluemix.net/uima-rest-server/?mode=form&mode=xml&lang=zh_TW&text=' + encodeURIComponent(msg.payload);\nnode.warn(msg.url);\n\nreturn msg;",
+        "outputs": "1",
+        "noerr": 0,
+        "x": 1250,
+        "y": 80,
+        "wires": [
+            [
+                "7111a541.c2481c",
+                "8d9277aa.e484d"
+            ]
+        ]
+    },
+    {
+        "id": "7111a541.c2481c",
+        "type": "http request",
+        "z": "3103d2a4.d55e76",
+        "name": "NLP-Telecom",
+        "method": "POST",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 1480,
+        "y": 160,
+        "wires": [
+            [
+                "5dfd22bd.056134"
+            ]
+        ]
+    },
+    {
+        "id": "5dfd22bd.056134",
+        "type": "xml",
+        "z": "3103d2a4.d55e76",
+        "name": "NLP-xml2json",
+        "attr": "",
+        "chr": "text",
+        "x": 1720,
+        "y": 160,
+        "wires": [
+            [
+                "8da3c800.e82a3",
+                "8caf75c1.46ae6"
+            ]
+        ]
+    },
+    {
+        "id": "8caf75c1.46ae6",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "bpm_data",
+        "func": "msg.payload.bpm_data  = {\n    input :{ \n            bpm_user : msg.bpm_user\n    },\n    output : []\n};\nvar top_class = msg.nlu.top_class;\nmsg.payload.bpm_data.input.check_service_type = top_class;\n\nreturn msg;",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 1920,
+        "y": 160,
+        "wires": [
+            [
+                "39e4fa61.296116"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "cda15e04.136cc8",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "Input",
+        "func": "// reserve msg.payload to msg.nlu.text\nmsg.nlu = {\n    text : msg.payload\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "8902b220.83717"
+            ]
+        ]
+    },
+    {
+        "id": "5feeaf88.1ec7f",
+        "type": "comment",
+        "z": "3103d2a4.d55e76",
+        "name": "NLU outputs",
+        "info": "output1 to NLP2Flight\noutput2 to NLP2BPM\n-- output1 & output2 thru bpm_data to output\noutput3 to nlpqa\noutput4 to unknown (others)",
+        "x": 2150,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "8da3c800.e82a3",
+        "type": "debug",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload.result",
+        "x": 1950,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "71ef2655.3910d",
+        "type": "comment",
+        "z": "3103d2a4.d55e76",
+        "name": "IBM Copyright V1.0",
+        "info": "Author: wjwu@tw.ibm.com\nPublish: 2016-07-30\n",
+        "x": 130,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e47fae1c.366ae8",
+        "type": "watson-natural-language-classifier",
+        "z": "3103d2a4.d55e76",
+        "name": "NLC-Intention",
+        "mode": "classify",
+        "language": "en",
+        "classifier": "e3ca6dx107-nlc-3376",
+        "x": 920,
+        "y": 80,
+        "wires": [
+            [
+                "e910afe2.6d49f8"
+            ]
+        ]
+    },
+    {
+        "id": "810fd535.802248",
+        "type": "switch",
+        "z": "3103d2a4.d55e76",
+        "name": "Check",
+        "property": "payload.top_class",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "BPM_Process",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "BPM_Process",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 570,
+        "y": 380,
+        "wires": [
+            [],
+            [
+                "dd2dd331.d4c498"
+            ]
+        ]
+    },
+    {
+        "id": "8fb2f1e2.07e478",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "func": "msg.payload=  msg.nlu.text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 730,
+        "y": 80,
+        "wires": [
+            [
+                "e47fae1c.366ae8"
+            ]
+        ]
+    },
+    {
+        "id": "39e4fa61.296116",
+        "type": "debug",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 2150,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "99a8b9ae.5a2a",
+        "type": "subflow:3103d2a4.d55e76",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "x": 1057,
+        "y": 412,
+        "wires": [
+            [
+                "20579abc.b4b56e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8d9277aa.e484d",
+        "type": "debug",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload.result",
+        "x": 1490,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "dd2dd331.d4c498",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "Call servlet",
+        "func": "var top = msg.payload.top_class;\nvar Table = global.get('txidTable');\nvar pname='';\nglobal.set('top_class', top);\nglobal.set('confidence', msg.payload.classes[0].confidence);\nglobal.set('origin_text', msg.nlu.text);\nmsg.method = 'GET';\nmsg.headers = { \n   'Content-Type':'application/json' \n};\nif(Table[msg.bpm_user] == ''){\n    pname = 'no';\n}\nelse{\n    pname = 'yes';\n}\n\n\nmsg.url =context.global.process.env['jbpm_url'] + 'nlc?status='+ top+'&intention='+parseInt(msg.payload.classes[0].confidence*100)+'&process_name='+pname;\nnode.warn(msg.url);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "34356f16.8a9268",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "check response",
+        "func": "msg.nlu.top_class = global.get('top_class');\nvar type = msg.payload.split(':')[1].split('\\\"')[1];\nmsg.payload = global.get('origin_text');\nmsg.headers = { \n   'Content-Type':'application/json' \n};\nvar uima_url = context.global.process.env['uima_url'];\nmsg.url = uima_url + encodeURIComponent(msg.payload);\nnode.warn(msg.url);\nif (type === 'BPM')\n    return [msg,null];\nelse if (type === 'CON')\n    return [null, msg];",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 1228.2727317810059,
+        "y": 162.272705078125,
+        "wires": [
+            [
+                "7111a541.c2481c"
+            ],
+            [
+                "4f32ceb4.d3cc68"
+            ]
+        ]
+    },
+    {
+        "id": "eefaf0b6.3dad",
+        "type": "http request",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 1018.2727317810059,
+        "y": 162.272705078125,
+        "wires": [
+            [
+                "34356f16.8a9268"
+            ]
+        ]
+    },
+    {
+        "id": "4f32ceb4.d3cc68",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "Message Contents",
+        "func": "msg.method = 'POST';\nmsg.headers = { \n   'Content-Type':'application/json' \n};\n\n//msg.url ='https://gateway.watsonplatform.net/conversation/api/v1/workspaces/716d1694-549f-4f4e-b05f-9f9cb29319ee/message?version=2016-10-04';\nmsg. url = context.global.process.env['conversation_url'];\nmsg.payload = {\n   \"input\": {\n       //\"text\": \"嬰兒享有多少的寄艙行李額度\"\n       \"text\": msg.payload\n       },\n       \"context\": {\n       \"conversation_id\": \"716d1694-549f-4f4e-b05f-9f9cb29319ee\",\n       \"system\": { \n           \"dialog_stack\": [{ \n               \"dialog_node\": \"root\" \n               }], \n           \"dialog_turn_counter\": 1, \n           \"dialog_request_counter\": 1 \n       },\n       \"reprompt\": true\n     }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1490,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8902b220.83717",
+        "type": "watson-conversation-v1",
+        "z": "3103d2a4.d55e76",
+        "name": "Conversation-Telecom",
+        "workspaceid": "3064efc1-6d3f-4682-b079-91d924862f64",
+        "multiuser": false,
+        "context": true,
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "64914a2c.56c844",
+                "947b6cf.8b7e31"
+            ]
+        ]
+    },
+    {
+        "id": "64914a2c.56c844",
+        "type": "switch",
+        "z": "3103d2a4.d55e76",
+        "name": "Check Intention",
+        "property": "payload.intents[0].intent",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "BPM_Process",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "BPM_Process",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 580,
+        "y": 120,
+        "wires": [
+            [
+                "8fb2f1e2.07e478"
+            ],
+            [
+                "e910afe2.6d49f8"
+            ]
+        ]
+    },
+    {
+        "id": "e910afe2.6d49f8",
+        "type": "function",
+        "z": "3103d2a4.d55e76",
+        "name": "Call servlet",
+        "func": "if(msg.payload.top_class){\n    var top = msg.payload.top_class;\n    global.set('confidence', msg.payload.classes[0].confidence);\n\n}else{\n    var top = msg.payload.intents[0].intent;\n    global.set('confidence', msg.payload.intents[0].confidence);\n\n}\n\nvar Table = global.get('txidTable');\nvar pname='';\nglobal.set('top_class', top);\nglobal.set('origin_text', msg.nlu.text);\nmsg.method = 'GET';\nmsg.headers = { \n   'Content-Type':'application/json' \n};\nif(Table[msg.bpm_user] == ''){\n    pname = 'no';\n}\nelse{\n    pname = 'yes';\n}\n\nmsg.url =context.global.process.env['jbpm_url'] + 'nlc?status='+ top+'&intention='+parseInt(global.get(\"confidence\")*100)+'&process_name='+pname;\n//msg.url =context.global.process.env['jbpm_url'] + 'nlc?status='+ top+'&intention='+parseInt(msg.payload.classes[0].confidence*100)+'&process_name='+pname;\nnode.warn(msg.url);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 810,
+        "y": 160,
+        "wires": [
+            [
+                "eefaf0b6.3dad"
+            ]
+        ]
+    },
+    {
+        "id": "947b6cf.8b7e31",
+        "type": "debug",
+        "z": "3103d2a4.d55e76",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 550,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f8ce5dbb.7ee1e",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "parse response",
+        "func": "msg.payload = JSON.parse(msg.payload);\nvar status = msg.payload[\"status\"];\nvar newmsg = global.get(\"oldmsg2\");\nnode.warn(\"status = \"+status);\n\nvar lat;\nvar lng;\nif (status == \"OK\") {\n    var results = msg.payload[\"results\"][0];\n    lat = results[\"geometry\"][\"location\"][\"lat\"];\n    lng = results[\"geometry\"][\"location\"][\"lng\"];\n    newmsg.bpm_data.input.longtitude = lng;\n    newmsg.bpm_data.input.latitude = lat;\n}\n\nreturn newmsg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2291,
+        "y": 90,
+        "wires": [
+            [
+                "bdca1ddd.43c58"
+            ]
+        ]
+    },
+    {
+        "id": "3899569c.8756aa",
+        "type": "http request",
+        "z": "8a10d260.97ada",
+        "name": "Google geocode API",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 2078,
+        "y": 79,
+        "wires": [
+            [
+                "f8ce5dbb.7ee1e",
+                "ebcc0f95.a0c69"
+            ]
+        ]
+    },
+    {
+        "id": "ed813564.56de88",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "Set Google URL",
+        "func": "var user_addr = encodeURIComponent(msg.payload.bpm_data.input.user_addr);\nnode.warn(user_addr);\nvar geocoderul = \"https://maps.googleapis.com/maps/api/geocode/json?\";\nvar key = \"&key=AIzaSyAwBO7gP7ZA40XaBmRJ4VX1Qgi6PiMpJIU&language=zh-tw\";\n\t\nmsg.method = 'GET';\n\n//msg.headers = { \n//    'Content-Type':'application/json' \n//};\nmsg.url = geocoderul+'address='+user_addr+key;\n\n\n//msg.url = encodeURI(msg.url);\nnode.warn(\"msg.url=\"+msg.url);\nmsg.bpm_data = msg.payload.bpm_data;\nglobal.set(\"oldmsg2\", msg)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1868.5,
+        "y": 95,
+        "wires": [
+            [
+                "3899569c.8756aa"
+            ]
+        ]
+    },
+    {
+        "id": "9041363c.fcc228",
+        "type": "switch",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "property": "payload.bpm_data.input.user_addr",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "null"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 1695,
+        "y": 138,
+        "wires": [
+            [
+                "ed813564.56de88"
+            ],
+            [
+                "a1007ca8.c1f33"
+            ]
+        ]
+    },
+    {
+        "id": "ede51e89.790de",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "LocationHandle",
+        "func": "function handleLocation(input){\n    console.log('start function');\n    var user_addr;\n    if(input.road || input.mrt_station){\n        if (input.mrt_station) {\n            user_addr = input.mrt_station;\n        }else if (input.road_intersaction) {\n            user_addr = input.primary_road + input.secondary_road;\n        }else if (input.road_section) {\n            user_addr = input.road + input.road_section\n        }else {\n            user_addr = input.road\n        }    \n    }    \n    return user_addr;\n}\n\nvar user_addr = handleLocation(msg.payload.bpm_data.input);\nnode.warn(\"user_addr = \" + user_addr);\nif (user_addr) {\n    msg.payload.bpm_data.input.user_addr = user_addr;\n    //msg.bpm_data = msg.payload.bpm_data;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1532,
+        "y": 122,
+        "wires": [
+            [
+                "9041363c.fcc228",
+                "cebca23a.21b6a"
+            ]
+        ]
+    },
+    {
+        "id": "a1007ca8.c1f33",
+        "type": "function",
+        "z": "8a10d260.97ada",
+        "name": "Set BPM URL",
+        "func": "var Table = global.get('txidTable');\nvar txid = Table[msg.bpm_user];\nnode.warn(\"txid=\"+txid);\n\nif(!txid){\n    Table[msg.bpm_user]=\"\";\n    msg.method = 'GET';\n    msg.headers = { \n        'Content-Type':'application/json' \n    };\n    msg.url =context.global.process.env['jbpm_url'] + 'initAirlineService?content='+JSON.stringify(msg.payload.bpm_data);\n    //msg.url ='http://ec2-54-186-105-165.us-west-2.compute.amazonaws.com:8280/insure-poc/poc/' + 'initAirlineService?content='+JSON.stringify(msg.payload.bpm_data);\n}\nelse{\n    msg.method = 'GET';\n    msg.headers = { \n        'Content-Type':'application/json' \n    };\n    msg.url =context.global.process.env['jbpm_url'] + 'contAirlineService?txid='+txid+'&content='+JSON.stringify(msg.payload.bpm_data);\n    //msg.url ='http://ec2-54-186-105-165.us-west-2.compute.amazonaws.com:8280/insure-poc/poc/' + 'contAirlineService?txid='+txid+'&content='+JSON.stringify(msg.payload.bpm_data);\n}\nmsg.url = encodeURI(msg.url);\nnode.warn(\"msg.url=\"+msg.url);\nmsg.bpm_data = msg.payload.bpm_data;\nglobal.set(\"oldmsg\", msg);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1963,
+        "y": 205,
+        "wires": [
+            [
+                "3ce6e16c.cdebbe"
+            ]
+        ]
+    },
+    {
+        "id": "cebca23a.21b6a",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1695,
+        "y": 23,
+        "wires": []
+    },
+    {
+        "id": "8f111bae.0aa618",
+        "type": "http request",
+        "z": "7d45e512.e8c27c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 430.5,
+        "y": 262,
+        "wires": [
+            [
+                "f64ba2e4.8049b"
+            ]
+        ]
+    },
+    {
+        "id": "8a3d421b.0107",
+        "type": "inject",
+        "z": "7d45e512.e8c27c",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 113.5,
+        "y": 287,
+        "wires": [
+            [
+                "4a38d1c7.f2813"
+            ]
+        ]
+    },
+    {
+        "id": "f64ba2e4.8049b",
+        "type": "debug",
+        "z": "7d45e512.e8c27c",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 660.5,
+        "y": 248,
+        "wires": []
+    },
+    {
+        "id": "4a38d1c7.f2813",
+        "type": "function",
+        "z": "7d45e512.e8c27c",
+        "name": "",
+        "func": "msg.url=\"https://maps.googleapis.com/maps/api/geocode/json?address=市政府站&key=AIzaSyAwBO7gP7ZA40XaBmRJ4VX1Qgi6PiMpJIU&language=zh-tw\";\nmsg.url=encodeURI(msg.url);\nmsg.method = \"GET\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 278.5,
+        "y": 234,
+        "wires": [
+            [
+                "8f111bae.0aa618"
+            ]
+        ]
+    },
+    {
+        "id": "ebcc0f95.a0c69",
+        "type": "debug",
+        "z": "8a10d260.97ada",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 2385.5,
+        "y": 147,
+        "wires": []
+    }
+]
